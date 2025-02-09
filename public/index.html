@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Kald fra Input</title>
+</head>
+<body>
+    <h1>AI billeder</h1>
+    <p>Skriv din prompt i feltet og tryk på knappen</p>
+    <!-- <input type="text" id="inputField" placeholder="Skriv noget..." width="200px" height="50px"> -->
+    <textarea id="textAreaField" placeholder="Skriv dit prompt..." rows="6" cols="30"></textarea>
+    <button onclick="callAPI()">Send</button>
+    <p id="result"></p>
+    <a id="link" target="_blank" href="#">Download billede</a>
+    <br>
+    <img id="aiImage" src="" alt="ai image" width="1000px"/>
+
+    <script>
+        async function callAPI() {
+            const input = document.getElementById("textAreaField").value;//document.getElementById("inputField").value;
+            if (!input) {
+                alert("Indtast noget!");
+                return;
+            }
+
+            const response = await fetch("http://localhost:3000/api", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query: input })
+            });
+
+            const data = await response.json();
+            //document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+            document.getElementById("link").href = data;
+
+            let image = document.getElementById("aiImage")
+            image.src = data;
+        }
+    </script>
+</body>
+</html>
